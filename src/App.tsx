@@ -1,6 +1,5 @@
 import "./App.css";
 import { useState } from "react";
-import formatTransaction from "./helpers/formatTransaction";
 
 type emanTransaction = {
   transaction: number;
