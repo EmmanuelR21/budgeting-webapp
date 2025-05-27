@@ -1,31 +1,15 @@
 import "./App.css";
-import { useState } from "react";
-
-type emanTransaction = {
-  transaction: number;
-  type: string;
-  description: string;
-};
+import { LineChart } from "@mui/x-charts/LineChart";
+import useTransactions from "./hooks/useTransactions";
 
 function App() {
-  const [transactions, setTransaction] = useState<emanTransaction[]>([]);
+  const { transactions, postTransaction } = useTransactions();
 
-  function postTransaction(formData: FormData) {
-    const transactionAmount = formData.get("transactionAmount");
-    const transactionType = formData.get("transactionType");
-    const transactionDescription = formData.get("transactionDescription");
+  const date1 = new Date();
+  const date2 = new Date();
 
-    const newTransaction: emanTransaction = {
-      transaction: Number(transactionAmount),
-      type: transactionType as string,
-      description: transactionDescription as string,
-    };
+  date2.setDate(date2.getDate() + 1);
 
-    setTransaction([...transactions, newTransaction]);
-    formData.delete("transactionAmount");
-    formData.delete("transactionType");
-    formData.delete("transactionDescription");
-  }
   return (
     <>
       <h1>Budgeting Web Application</h1>
@@ -45,9 +29,7 @@ function App() {
         <label htmlFor="transactionType">
           Transaction Type
           <select id="transactionType" name="transactionType">
-            <option selected value="General">
-              General
-            </option>
+            <option defaultValue="General">General</option>
             <option value="Income">Income</option>
             <option value="Expense">Expense</option>
           </select>
@@ -92,6 +74,23 @@ function App() {
           )}
         </tbody>
       </table>
+
+      <LineChart
+        grid={{ vertical: true, horizontal: true }}
+        xAxis={[
+          {
+            id: "timestamp",
+            scaleType: "time",
+            data: [date1, date2],
+          },
+        ]}
+        height={500}
+        series={[
+          {
+            data: [13, 10],
+          },
+        ]}
+      ></LineChart>
     </>
   );
 }
